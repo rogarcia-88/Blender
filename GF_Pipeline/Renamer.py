@@ -4,7 +4,7 @@ bl_info = {
     'blender': (2, 93, 0),
     'category': 'Object',
     # optional
-    'version': (1, 0, 0),
+    'version': (1, 0, 1),
     'author': 'Ró García',
     'description': 'Gold Fever Team Pipeline Tools',
 }
