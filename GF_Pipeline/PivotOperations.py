@@ -2,13 +2,14 @@ import bpy
 from mathutils import Matrix, Vector
 import numpy as np
 
+
 class PivotToolsPanel(bpy.types.Panel):
     """Creates a Panel in the scene context of the properties editor"""
     bl_label = "Pivot Tools"
     bl_idname = "VIEW3D_PT_layout"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Gold Fever Tools'
+    #bl_category = 'Gold Fever Tools'
     #bl_context = "scene"
 
     def draw(self, context):
@@ -25,6 +26,9 @@ class PivotToolsPanel(bpy.types.Panel):
         row.operator("opr.pivot_top", text= "Pivot Top")
         row = layout.row()
         row.operator("opr.pivot_center", text= "Pivot Center")
+        row = layout.row()
+        row.operator("opr.to_origin", text= "Move to Origin")
+        row.scale_y = 2.0
         
 
 class PivotBottom(bpy.types.Operator):
@@ -99,6 +103,23 @@ class PivotCenter(bpy.types.Operator):
                  
             
         return {'FINISHED'}
+    
+class ToOrigin(bpy.types.Operator):
+    bl_idname = "opr.to_origin"
+    bl_label = "Pivot Center"
+    
+    def execute(self, context):
+       
+        bpy.context.scene.cursor.location = (0, 0, 0)
+        selected = bpy.context.selected_objects 
+        
+        for obj in selected:
+            bpy.ops.object.location_clear(clear_delta=True)
+            
+            
+                 
+            
+        return {'FINISHED'}
 
 
 
@@ -107,14 +128,18 @@ def register():
     bpy.utils.register_class(PivotBottom)
     bpy.utils.register_class(PivotTop)
     bpy.utils.register_class(PivotCenter)
+    bpy.utils.register_class(ToOrigin)
 
 
 
 def unregister():
     bpy.utils.unregister_class(PivotToolsPanel)
     bpy.utils.unregister_class(PivotBottom)
-    bpy.utils.register_class(PivotTop)
+    bpy.utils.unregister_class(PivotTop)
+    bpy.utils.register_class(PivotCenter)
+    bpy.utils.register_class(ToOrigin)
 
 
 if __name__ == "__main__":
     register()
+

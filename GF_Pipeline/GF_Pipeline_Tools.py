@@ -157,6 +157,9 @@ class PivotToolsPanel(bpy.types.Panel):
         row.operator("opr.pivot_top", text= "Pivot Top")
         row = layout.row()
         row.operator("opr.pivot_center", text= "Pivot Center")
+        row = layout.row()
+        row.operator("opr.to_origin", text= "Move to Origin")
+        row.scale_y = 2.0
         
 
 class PivotBottom(bpy.types.Operator):
@@ -231,6 +234,23 @@ class PivotCenter(bpy.types.Operator):
                  
             
         return {'FINISHED'}
+    
+class ToOrigin(bpy.types.Operator):
+    bl_idname = "opr.to_origin"
+    bl_label = "Pivot Center"
+    
+    def execute(self, context):
+       
+        bpy.context.scene.cursor.location = (0, 0, 0)
+        selected = bpy.context.selected_objects 
+        
+        for obj in selected:
+            bpy.ops.object.location_clear(clear_delta=True)
+            
+            
+                 
+            
+        return {'FINISHED'}
 
 
     
@@ -286,6 +306,7 @@ classes = [
     PivotBottom,
     PivotTop,
     PivotCenter,
+    ToOrigin,
     UnrealEngineExport,
     UnrealEngineExportOperator,
     
