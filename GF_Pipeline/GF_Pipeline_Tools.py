@@ -25,7 +25,7 @@ class RenamerPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         row = layout.row()
-        row.operator('object.renameobjects', text="Rename")
+        row.operator('object.renameobjects', text="Rename", icon="SORTALPHA")
 
 
 
@@ -149,16 +149,15 @@ class PivotToolsPanel(bpy.types.Panel):
         scene = context.scene
 
         # Pivot Tools UI
-        layout.label(text="Pivot:")
         row = layout.row()
         #row.scale_y = 2.0
         row = layout.row(align=True)
-        row.operator("opr.pivot_bottom", text= "Pivot Bottom")
-        row.operator("opr.pivot_top", text= "Pivot Top")
+        row.operator("opr.pivot_bottom", text= "Pivot Bottom", icon="PIVOT_BOUNDBOX")
+        row.operator("opr.pivot_top", text= "Pivot Top", icon="PIVOT_BOUNDBOX")
         row = layout.row()
-        row.operator("opr.pivot_center", text= "Pivot Center")
+        row.operator("opr.pivot_center", text= "Pivot Center", icon="PIVOT_BOUNDBOX")
         row = layout.row()
-        row.operator("opr.to_origin", text= "Move to Origin")
+        row.operator("opr.to_origin", text= "Move to Origin", icon="PIVOT_CURSOR")
         row.scale_y = 2.0
         
 
@@ -266,7 +265,7 @@ class UnrealEngineExport(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         row = layout.row()
-        row.operator('opr.gold_fever_export_operator', text="Export")
+        row.operator('opr.gold_fever_export_operator', text="Export", icon="EXPORT")
         
 class UnrealEngineExportOperator(bpy.types.Operator):
     
@@ -302,13 +301,13 @@ classes = [
    
     Object_OT_RenameObjects,
     RenamerPanel,
-    PivotToolsPanel,
     PivotBottom,
     PivotTop,
     PivotCenter,
     ToOrigin,
-    UnrealEngineExport,
+    PivotToolsPanel, 
     UnrealEngineExportOperator,
+    UnrealEngineExport,
     
 ]
 

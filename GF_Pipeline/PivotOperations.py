@@ -18,16 +18,16 @@ class PivotToolsPanel(bpy.types.Panel):
         scene = context.scene
 
         # Pivot Tools UI
-        layout.label(text="Pivot:")
+        
         row = layout.row()
         #row.scale_y = 2.0
         row = layout.row(align=True)
-        row.operator("opr.pivot_bottom", text= "Pivot Bottom")
-        row.operator("opr.pivot_top", text= "Pivot Top")
+        row.operator("opr.pivot_bottom", text= "Pivot Bottom", icon="PIVOT_BOUNDBOX")
+        row.operator("opr.pivot_top", text= "Pivot Top", icon="PIVOT_BOUNDBOX")
         row = layout.row()
-        row.operator("opr.pivot_center", text= "Pivot Center")
+        row.operator("opr.pivot_center", text= "Pivot Center", icon="PIVOT_BOUNDBOX")
         row = layout.row()
-        row.operator("opr.to_origin", text= "Move to Origin")
+        row.operator("opr.to_origin", text= "Move to Origin", icon="PIVOT_CURSOR")
         row.scale_y = 2.0
         
 
