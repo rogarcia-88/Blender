@@ -10,6 +10,7 @@ bl_info = {
 }
 
 import bpy
+import os
 from bpy.types import Operator
 from mathutils import Matrix, Vector
 import numpy as np
@@ -289,11 +290,58 @@ class UnrealEngineExportOperator(bpy.types.Operator):
                                     use_tspace = True,  
                                     add_leaf_bones=False, 
                                     )
+            return {'FINISHED'}      
             
-        return {'FINISHED'}    
+class FBXMeshExport(bpy.types.Panel):
+       
+    bl_idname = 'VIEW3D_PT_mesh_export_panel'
+    bl_label = 'Mesh Export'
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Gold Fever Tools'
+    
+    def draw(self, context):
+        layout = self.layout
+        row = layout.row()
+        row.operator('opr.fbx_mesh_export_operator', text="Export Separate", icon="EXPORT")
+            
+            
         
+class FBXMeshExportOperator(bpy.types.Operator):
+    
+    bl_idname = 'opr.fbx_mesh_export_operator'
+    bl_label = 'Mesh Exporter'
+    
+    def execute(self, context):
+        
+        # Creates the path for the exported fbx.
+        file_path = os.path.splitext(bpy.data.filepath)[0]  
+        if not os.path.exists(file_path):
+            os.mkdir(file_path)
+        
+        selected = bpy.context.selected_objects   
 
-
+        for obj in selected:
+            
+            bpy.ops.object.select_all(action='DESELECT')
+            obj.select_set(True)
+            
+            obj_path = os.path.join(file_path,
+                                    obj.name + "." + "fbx")
+            
+            
+            triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
+            triangulate.quad_method = 'FIXED'
+            triangulate.keep_custom_normals = True
+            bpy.ops.export_scene.fbx('INVOKE_DEFAULT',
+                                    filepath=obj_path,
+                                    use_selection = True, 
+                                    object_types = {'MESH'}, 
+                                    mesh_smooth_type = 'FACE', 
+                                    use_tspace = True,  
+                                    add_leaf_bones=False, 
+                                    )
+        return {'FINISHED'}  
 
 
 #List of Classes
@@ -308,6 +356,8 @@ classes = [
     PivotToolsPanel, 
     UnrealEngineExportOperator,
     UnrealEngineExport,
+    FBXMeshExportOperator,
+    FBXMeshExport,
     
 ]
 
@@ -332,3 +382,5 @@ def unregister():
 #Register the class
 if __name__ == '__main__':
    register()
+
+
