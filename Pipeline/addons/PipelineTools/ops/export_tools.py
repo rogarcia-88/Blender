@@ -32,7 +32,7 @@ class UnrealEngineExportOperator(bpy.types.Operator):
             triangulate.keep_custom_normals = True
             bpy.ops.export_scene.fbx('INVOKE_DEFAULT',
                                     use_selection = True, 
-                                    object_types = {'MESH'}, 
+                                    object_types = {'MESH', 'ARMATURE'}, 
                                     mesh_smooth_type = 'FACE', 
                                     use_tspace = True,  
                                     add_leaf_bones=False, 
