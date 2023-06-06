@@ -1,12 +1,12 @@
 bl_info = {
     # required
-    'name': 'Pipeline Tools',
+    'name': 'Unreal Pipeline Tools',
     'blender': (2, 93, 0),
     'category': 'Object',
     # optional
     'version': (1, 0, 1),
     'author': 'Ró García',
-    'description': 'My Pipeline Tools',
+    'description': 'Basic asset management pipeline tools for Unreal',
 }
 
 import bpy

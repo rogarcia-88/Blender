@@ -10,7 +10,7 @@ class PivotToolsPanel(bpy.types.Panel):
     bl_idname = "VIEW3D_PT_layout"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Gold Fever Tools'
+    bl_category = 'Unreal Pipeline Tools'
     #bl_context = "scene"
 
     def draw(self, context):
