@@ -25,19 +25,22 @@ class UnrealEngineExportOperator(bpy.types.Operator):
         selected = bpy.context.selected_objects   
 
         for obj in selected:
+            #Triangulate meshes
+            try:
+                triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
+                triangulate.quad_method = 'FIXED'
+                triangulate.keep_custom_normals = True
+            except:
+                break        
             
-            
-            triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
-            triangulate.quad_method = 'FIXED'
-            triangulate.keep_custom_normals = True
-            bpy.ops.export_scene.fbx('INVOKE_DEFAULT',
-                                    use_selection = True, 
-                                    object_types = {'MESH', 'ARMATURE'}, 
-                                    mesh_smooth_type = 'FACE', 
-                                    use_tspace = True,  
-                                    add_leaf_bones=False, 
-                                    )
-            return {'FINISHED'}      
+        bpy.ops.export_scene.fbx('INVOKE_DEFAULT',
+                                use_selection = True, 
+                                object_types = {'MESH', 'ARMATURE'}, 
+                                mesh_smooth_type = 'FACE', 
+                                use_tspace = True,  
+                                add_leaf_bones=False, 
+                                )
+        return {'FINISHED'}      
             
 class FBXMeshExport(bpy.types.Panel):
        
@@ -61,12 +64,23 @@ class FBXMeshExportOperator(bpy.types.Operator):
         
         # Creates the path for the exported fbx.
         file_path = os.path.splitext(bpy.data.filepath)[0]  
-        if not os.path.exists(file_path):
+       #Output error if the file hasn't been saved
+        if not os.path.exists(bpy.data.filepath):
+            self.report({'ERROR'}, "Please save the file")
+        elif not os.path.exists(file_path):
             os.mkdir(file_path)
         
          
-
+        
         for obj in bpy.context.selected_objects:
+            #Triangulate meshes
+            try:
+                triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
+                triangulate.quad_method = 'FIXED'
+                triangulate.keep_custom_normals = True
+            except:
+                break 
+                
             
             bpy.ops.object.select_all(action='DESELECT')
             obj.select_set(True)
@@ -75,13 +89,11 @@ class FBXMeshExportOperator(bpy.types.Operator):
                                     obj.name + "." + "fbx")
             
             
-            triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
-            triangulate.quad_method = 'FIXED'
-            triangulate.keep_custom_normals = True
+        
             bpy.ops.export_scene.fbx(
                                     filepath=obj_path,
                                     use_selection = True, 
-                                    object_types = {'MESH'}, 
+                                    object_types = {'MESH', 'ARMATURE'}, 
                                     mesh_smooth_type = 'FACE', 
                                     use_tspace = True,  
                                     add_leaf_bones=False, 
