@@ -20,18 +20,27 @@ class UnrealEngineExportOperator(bpy.types.Operator):
     bl_idname = 'opr.gold_fever_export_operator'
     bl_label = 'Object Exporter'
     
+    
     def execute(self, context):
         
-        selected = bpy.context.selected_objects   
+        selected = bpy.context.selected_objects 
+          
 
         for obj in selected:
-            #Triangulate meshes
-            try:
+        
+            target_modifier_name = 'Triangulate'
+            triangulate_modifier = obj.modifiers.get(target_modifier_name)
+            
+            if triangulate_modifier:
+                
+                break
+                    
+            else:
                 triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
                 triangulate.quad_method = 'FIXED'
                 triangulate.keep_custom_normals = True
-            except:
-                break        
+                    
+                          
             
         bpy.ops.export_scene.fbx('INVOKE_DEFAULT',
                                 use_selection = True, 
