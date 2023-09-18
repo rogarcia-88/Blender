@@ -1,12 +1,12 @@
 bl_info = {
     # required
-    'name': 'Unreal Pipeline Tools',
+    'name': 'Game Pipeline Tools',
     'blender': (2, 93, 0),
     'category': 'Object',
     # optional
     'version': (1, 0, 1),
     'author': 'Ró García',
-    'description': 'Basic asset management pipeline tools for Unreal',
+    'description': 'Basic Asset Management & Pipeline tools for Game Engines',
 }
 
 import bpy
@@ -33,13 +33,19 @@ classes = [
 
 def register():
     
-    
+    #Registering Bool Checkbox
+    bpy.types.Scene.my_bool = bpy.props.BoolProperty(
+        name="Triangulate",
+        description="Add a Triangulate modifier to assets",
+        default=False
+    )
         
     for klass in classes:
         bpy.utils.register_class(klass)
         
 def unregister():
     
+    del bpy.types.Scene.my_bool
     
     for klass in classes:
         bpy.utils.unregister_class(klass)

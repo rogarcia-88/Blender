@@ -7,7 +7,7 @@ class RenamerPanel(bpy.types.Panel):
     bl_label = 'Batch Renamer'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Unreal Pipeline Tools'
+    bl_category = 'Game Pipeline Tools'
     
     def draw(self, context):
         layout = self.layout

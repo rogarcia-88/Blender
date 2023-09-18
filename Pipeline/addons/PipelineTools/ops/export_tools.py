@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Operator
+from bpy.types import Operator, Panel
 import os
 
 class UnrealEngineExport(bpy.types.Panel):
@@ -8,12 +8,15 @@ class UnrealEngineExport(bpy.types.Panel):
     bl_label = 'Unreal Engine Export'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Unreal Pipeline Tools'
+    bl_category = 'Game Pipeline Tools'
     
     def draw(self, context):
         layout = self.layout
         row = layout.row()
         row.operator('opr.gold_fever_export_operator', text="Export", icon="EXPORT")
+        # Create a checkbox
+        layout.prop(context.scene, "my_bool", text=" Triangulate Mesh")
+
         
 class UnrealEngineExportOperator(bpy.types.Operator):
     
@@ -24,21 +27,22 @@ class UnrealEngineExportOperator(bpy.types.Operator):
     def execute(self, context):
         
         selected = bpy.context.selected_objects 
-          
-
-        for obj in selected:
         
-            target_modifier_name = 'Triangulate'
-            triangulate_modifier = obj.modifiers.get(target_modifier_name)
+        #Triangulate if check box is enabled  
+        if context.scene.my_bool:
+            for obj in selected:
             
-            if triangulate_modifier:
+                target_modifier_name = 'Triangulate'
+                triangulate_modifier = obj.modifiers.get(target_modifier_name)
                 
-                break
+                if triangulate_modifier:
                     
-            else:
-                triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
-                triangulate.quad_method = 'FIXED'
-                triangulate.keep_custom_normals = True
+                    break
+                        
+                else:
+                    triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
+                    triangulate.quad_method = 'FIXED'
+                    triangulate.keep_custom_normals = True
                     
                           
             
@@ -57,12 +61,14 @@ class FBXMeshExport(bpy.types.Panel):
     bl_label = 'FBX Split Export'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Unreal Pipeline Tools'
+    bl_category = 'Game Pipeline Tools'
     
     def draw(self, context):
         layout = self.layout
         row = layout.row()
         row.operator('opr.fbx_mesh_export_operator', text="Export", icon="EXPORT")
+         # Create a checkbox
+        layout.prop(context.scene, "my_bool", text=" Triangulate Mesh")
 
 class FBXMeshExportOperator(bpy.types.Operator):
     
@@ -83,12 +89,21 @@ class FBXMeshExportOperator(bpy.types.Operator):
         
         for obj in bpy.context.selected_objects:
             #Triangulate meshes
-            try:
-                triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
-                triangulate.quad_method = 'FIXED'
-                triangulate.keep_custom_normals = True
-            except:
-                break 
+            #Triangulate if check box is enabled  
+            if context.scene.my_bool:
+                
+                
+                target_modifier_name = 'Triangulate'
+                triangulate_modifier = obj.modifiers.get(target_modifier_name)
+                
+                if triangulate_modifier:
+                    
+                    break
+                        
+                else:
+                    triangulate = obj.modifiers.new("Triangulate", 'TRIANGULATE')
+                    triangulate.quad_method = 'FIXED'
+                    triangulate.keep_custom_normals = True
                 
             
             bpy.ops.object.select_all(action='DESELECT')
