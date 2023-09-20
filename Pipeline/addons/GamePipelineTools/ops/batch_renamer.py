@@ -1,47 +1,52 @@
 import bpy
-from bpy.types import Operator
+from bpy.types import Operator, Panel
 
 class RenamerPanel(bpy.types.Panel):
-       
+    """
+    Renamer Panel: Allows batch renaming of selected objects.
+    """
     bl_idname = 'VIEW3D_PT_Renamer_panel'
     bl_label = 'Batch Renamer'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'Game Pipeline Tools'
-    
+
     def draw(self, context):
         layout = self.layout
         row = layout.row()
         row.operator('object.renameobjects', text="Rename", icon="SORTALPHA")
 
-
-
 class Object_OT_RenameObjects(Operator):
+    """
+    Rename Object(s) Operator: Provides options for renaming selected objects.
+    """
     bl_idname = "object.renameobjects"
     bl_label = "Rename Object(s)"
 
     # Multi Object rename UI
-    BNameCB   : bpy.props.BoolProperty(name = "Base Name:")
-    BaseName  : bpy.props.StringProperty(name = "")
-    PreFixCB  : bpy.props.BoolProperty(name = "Prefix:")
-    PreFix    : bpy.props.StringProperty(name = "")
-    RemFrst   : bpy.props.BoolProperty(name = "Remove First")
-    DgtFrst   : bpy.props.IntProperty(name = "Digits")
-    SuffixCB  : bpy.props.BoolProperty(name = "Suffix")
-    Suffix    : bpy.props.StringProperty(name = "")
-    RemLast   : bpy.props.BoolProperty(name = "Remove Last")
-    DgtLast   : bpy.props.IntProperty(name = "Digits")
-    NumbredCB : bpy.props.BoolProperty(name = "Numbered")
-    BaseNum   : bpy.props.IntProperty(name = "Base Number")
-    Step      : bpy.props.IntProperty(name = "Step", default = 1)
-    findCB    : bpy.props.BoolProperty(name = "Replace")
-    find      : bpy.props.StringProperty(name = "")
-    replace   : bpy.props.StringProperty(name = "")
+    BNameCB   : bpy.props.BoolProperty(name="Base Name:")
+    BaseName  : bpy.props.StringProperty(name="")
+    PreFixCB  : bpy.props.BoolProperty(name="Prefix:")
+    PreFix    : bpy.props.StringProperty(name="")
+    RemFrst   : bpy.props.BoolProperty(name="Remove First")
+    DgtFrst   : bpy.props.IntProperty(name="Digits")
+    SuffixCB  : bpy.props.BoolProperty(name="Suffix")
+    Suffix    : bpy.props.StringProperty(name="")
+    RemLast   : bpy.props.BoolProperty(name="Remove Last")
+    DgtLast   : bpy.props.IntProperty(name="Digits")
+    NumbredCB : bpy.props.BoolProperty(name="Numbered")
+    BaseNum   : bpy.props.IntProperty(name="Base Number")
+    Step      : bpy.props.IntProperty(name="Step", default=1)
+    findCB    : bpy.props.BoolProperty(name="Replace")
+    find      : bpy.props.StringProperty(name="")
+    replace   : bpy.props.StringProperty(name="")
+    
     # Single rename UI
     Name : bpy.props.StringProperty(name="Name")
 
     def draw(self, ctx):
         SelCount = len(bpy.context.selected_objects)
+        
         if SelCount > 1:
             box = self.layout.box()
             row = box.row()
@@ -67,10 +72,12 @@ class Object_OT_RenameObjects(Operator):
             row.prop(self, "findCB")
             row.prop(self, "find")
             row.prop(self, "replace")
+        
         if SelCount == 1:
             box = self.layout.box()
             row = box.row()
             row.prop(self, "Name")
+        
         if SelCount == 0:
             box = self.layout.box()
             row = box.row()
@@ -85,37 +92,47 @@ class Object_OT_RenameObjects(Operator):
         if SelCount > 1:
             SelObj = bpy.context.selected_objects
             Index = self.BaseNum
-            for i in range(0,SelCount):
-                # Get Object Original Name #
+            for i in range(0, SelCount):
+                # Get Object Original Name
                 NewName = SelObj[i].name
-                # Set the Base name #
+                
+                # Set the Base name
                 if self.BNameCB:
                     NewName = self.BaseName
-                # Remove First characters #
+                
+                # Remove First characters
                 if self.RemFrst:
-                    NewName = NewName[self.DgtFrst : self.DgtFrst + len(NewName)]
-                # Remove Last Characters #
+                    NewName = NewName[self.DgtFrst: self.DgtFrst + len(NewName)]
+                
+                # Remove Last Characters
                 if self.RemLast:
-                    NewName = NewName[1 : len(NewName) - self.DgtLast]
-                # Add Prefix to the new name #
+                    NewName = NewName[1: len(NewName) - self.DgtLast]
+                
+                # Add Prefix to the new name
                 if self.PreFixCB:
                     NewName = self.PreFix + NewName
-                # Add Suffix to the new name #
+                
+                # Add Suffix to the new name
                 if self.SuffixCB:
                     NewName = NewName + self.Suffix
-                # Add Digits to end of new name #
+                
+                # Add Digits to end of new name
                 if self.NumbredCB:
-                        NewName += str(Index)
-                        Index += self.Step
-                # Find and Replace #
+                    NewName += str(Index)
+                    Index += self.Step
+                
+                # Find and Replace
                 if self.findCB:
                     NewName = NewName.replace(self.find, self.replace)
-                # Set the new name to the object #
+                
+                # Set the new name to the object
                 SelObj[i].name = NewName
+        
         elif SelCount == 1:
             bpy.context.selected_objects[0].name = self.Name
+        
         return {'FINISHED'}
-       
+
     def invoke(self, context, event):
         wm = context.window_manager
         return wm.invoke_props_dialog(self)

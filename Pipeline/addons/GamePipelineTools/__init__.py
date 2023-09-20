@@ -34,10 +34,16 @@ classes = [
 def register():
     
     #Registering Bool Checkbox
-    bpy.types.Scene.my_bool = bpy.props.BoolProperty(
+    bpy.types.Scene.triangulate_fbx_bool = bpy.props.BoolProperty(
         name="Triangulate",
         description="Add a Triangulate modifier to assets",
         default=False
+    )
+    
+    bpy.types.Scene.triangulate_split_fbx_bool = bpy.props.BoolProperty(
+    name="Triangulate",
+    description="Add a Triangulate modifier to assets",
+    default=False
     )
         
     for klass in classes:
@@ -45,7 +51,8 @@ def register():
         
 def unregister():
     
-    del bpy.types.Scene.my_bool
+    del bpy.types.Scene.triangulate_fbx_bool
+    del bpy.types.Scene.triangulate_split_fbx_bool
     
     for klass in classes:
         bpy.utils.unregister_class(klass)
