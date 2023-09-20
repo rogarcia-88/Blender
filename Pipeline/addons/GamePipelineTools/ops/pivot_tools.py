@@ -15,7 +15,7 @@ class PivotToolsPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
-        # Pivot Tools UI
+        # PIVOT TOOLS UI
         row = layout.row()
         row = layout.row(align=True)
         row.operator("opr.pivot_bottom", text="Pivot Bottom", icon="PIVOT_BOUNDBOX")

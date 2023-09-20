@@ -17,7 +17,7 @@ class UnrealEngineExport(bpy.types.Panel):
         row = layout.row()
         row.operator('opr.gold_fever_export_operator', text="Export", icon="EXPORT")
         
-        # Create a checkbox for triangulating meshes
+        # CREATE A CHECKBOX FOR TRIANGULATING MESHES
         layout.prop(context.scene, "triangulate_fbx_bool", text="Triangulate Mesh")
 
 class UnrealEngineExportOperator(bpy.types.Operator):
@@ -30,7 +30,7 @@ class UnrealEngineExportOperator(bpy.types.Operator):
     def execute(self, context):
         selected = bpy.context.selected_objects 
         
-        # Triangulate if the checkbox is enabled
+        # TRIANGULATE IF THE CHECKBOX IS ENABLED
         if context.scene.triangulate_fbx_bool:
             for obj in selected:
                 target_modifier_name = 'Triangulate'
@@ -66,7 +66,7 @@ class FBXMeshExport(bpy.types.Panel):
         layout = self.layout
         row = layout.row()
         row.operator('opr.fbx_mesh_export_operator', text="Export", icon="EXPORT")
-         # Create a checkbox for triangulating meshes
+         # CREATE A CHECKBOX FOR TRIANGULATING MESHES
         layout.prop(context.scene, "triangulate_split_fbx_bool", text="Triangulate Mesh")
 
 class FBXMeshExportOperator(bpy.types.Operator):
@@ -79,10 +79,10 @@ class FBXMeshExportOperator(bpy.types.Operator):
     
     
     def execute(self, context):
-        # Creates the path for the exported FBX.
+        # CREATES THE PATH FOR THE EXPORTED FBX.
         file_path = os.path.splitext(bpy.data.filepath)[0]  
         
-        #Info message displayed when meshes exported succesfully
+        #INFO MESSAGE DISPLAYED WHEN MESHES EXPORTED SUCCESFULLY
         def ShowMessageBox(message = "", title = "Message Box", icon = 'INFO'):
 
             def draw(self, context):
@@ -91,14 +91,16 @@ class FBXMeshExportOperator(bpy.types.Operator):
             bpy.context.window_manager.popup_menu(draw, title = title, icon = icon)
         
         
-        # Output error if the file hasn't been saved
+        # OUTPUT ERROR IF THE FILE HASN'T BEEN SAVED
         if not os.path.exists(bpy.data.filepath):
             self.report({'ERROR'}, "Please save the scene first")
+
         elif not os.path.exists(file_path):
             os.mkdir(file_path)
+
         else:
             for obj in bpy.context.selected_objects:
-                # Triangulate meshes if the checkbox is enabled
+                # TRIANGULATE MESHES IF THE CHECKBOX IS ENABLED
                 if context.scene.triangulate_split_fbx_bool:
                     target_modifier_name = 'Triangulate'
                     triangulate_modifier = obj.modifiers.get(target_modifier_name)
@@ -123,8 +125,7 @@ class FBXMeshExportOperator(bpy.types.Operator):
                     use_tspace=True,  
                     add_leaf_bones=False, 
                 )
-                #Shows a message box with a message and custom title
+                #SHOWS A MESSAGE BOX WITH A MESSAGE AND CUSTOM TITLE
                 ShowMessageBox(f"Assets exported to {file_path} ", "Export Succesful")
                         
-                #self.report({'INFO'}, f"{obj.name} saved to scene path")
         return {'FINISHED'}
