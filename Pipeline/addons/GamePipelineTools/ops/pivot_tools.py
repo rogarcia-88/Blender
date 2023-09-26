@@ -17,6 +17,9 @@ class PivotToolsPanel(bpy.types.Panel):
 
         # PIVOT TOOLS UI
         row = layout.row()
+        row.operator("opr.apply_transforms", text="Apply Transforms", icon="TRANSFORM_ORIGINS")
+        
+        row = layout.row()
         row = layout.row(align=True)
         row.operator("opr.pivot_bottom", text="Pivot Bottom", icon="PIVOT_BOUNDBOX")
         row.operator("opr.pivot_top", text="Pivot Top", icon="PIVOT_BOUNDBOX")
@@ -25,6 +28,22 @@ class PivotToolsPanel(bpy.types.Panel):
         row = layout.row()
         row.operator("opr.to_origin", text="Move to Origin", icon="PIVOT_CURSOR")
         row.scale_y = 2.0
+
+class ApplyTransforms(bpy.types.Operator):
+    """
+    Apply Transforms Operator: Bake the transforms of the selected objects.
+    """
+    bl_idname = "opr.apply_transforms"
+    bl_label = "Apply Transforms"
+    
+    def execute(self, context):
+        
+        selected = bpy.context.selected_objects 
+        
+        for obj in selected:
+            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+            
+        return {'FINISHED'}
 
 class PivotBottom(bpy.types.Operator):
     """

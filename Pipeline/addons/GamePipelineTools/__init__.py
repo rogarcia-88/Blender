@@ -16,6 +16,7 @@ classes = [
    
     batch_renamer.Object_OT_RenameObjects,
     batch_renamer.RenamerPanel,
+    pivot_tools.ApplyTransforms,
     pivot_tools.PivotBottom,
     pivot_tools.PivotTop,
     pivot_tools.PivotCenter,
